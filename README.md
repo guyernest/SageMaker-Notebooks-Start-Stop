@@ -1,7 +1,7 @@
 In this post, we will explore using Jupyter notebook as a development
 environment for DevOps for AWS. We will use an example of developing a
 mechanism to save 70% of the cost notebook instances in SageMaker,
-using automatic stop and start at the end and beginning start of every
+using automatic stop and start at the end and beginning of every
 working day. Since the Jupyter notebooks are used interactively during
 the working hours, stopping them and stopping to pay for them during
 the nights and the weekends can save about 70% of the costs. We can
