@@ -1,8 +1,8 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-west-1"
 }
 
-resource "aws_lambda_function" "examlpe" {
+resource "aws_lambda_function" "start_stop_sm" {
   function_name = "StopStartSageMakerNotebookInstances"
 
   # The bucket name as created earlier with "aws s3api create-bucket"
@@ -13,16 +13,35 @@ resource "aws_lambda_function" "examlpe" {
   # is the name of the property under which the handler function was
   # exported in that file.
   handler = "lambda_function.lambda_handler"
-  runtime = "Python3.6"
+  runtime = "python3.6"
 
   role = "${aws_iam_role.lambda_exec.arn}"
-}
-# IAM role which dictates what other AWS services the Lambda function
+}# IAM role which dictates what other AWS services the Lambda function
 # may access.
+## Testing a working example
 resource "aws_iam_role" "lambda_exec" {
-  name = "serverless_example_lambda"
+    name = "assume-role"
+    assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Principal": {
+            "Service": "lambda.amazonaws.com"
+          },
+          "Effect": "Allow",
+          "Sid": ""
+        }
+      ]
+    }
+EOF
+}
 
-  assume_role_policy = <<EOF
+resource "aws_iam_policy" "policy" {
+    name        = "control-policy"
+    description = "A policy to control SageMaker instances start/stop state"
+    policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -66,4 +85,9 @@ resource "aws_iam_role" "lambda_exec" {
     ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "test-attach" {
+    role       = "${aws_iam_role.lambda_exec.name}"
+    policy_arn = "${aws_iam_policy.policy.arn}"
 }
