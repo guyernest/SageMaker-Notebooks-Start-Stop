@@ -1,3 +1,5 @@
+![Solution Architecture][StartStopSM.png]
+
 In this post, we will explore using Jupyter notebook as a development
 environment for DevOps for AWS. We will use an example of developing a
 mechanism to save 70% of the cost notebook instances in SageMaker,
