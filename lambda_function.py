@@ -18,10 +18,10 @@ def lambda_handler(event, context):
         for tag in instanceTags['Tags']:
             if (tag['Key'] == 'InDuty' and tag['Value'] =='Yes'):
                 logger.info('instance {0} is in duty'.format(candidateName))
-                if (event['event'] == "On"):
+                if (event['event'] == "On" and candidate['NotebookInstanceStatus'] == 'Stopped'):
                     response = client.start_notebook_instance(NotebookInstanceName=candidateName)
                     logger.info('instance {0} was started'.format(candidateName))
-                elif (event['event'] == "Off"):
+                elif (event['event'] == "Off" and candidate['NotebookInstanceStatus'] == 'InService'):
                     response = client.stop_notebook_instance(NotebookInstanceName=candidateName)
                     logger.info('instance {0} was stopped'.format(candidateName))
             else:
