@@ -8,7 +8,7 @@ client = boto3.client('sagemaker')
 
 def lambda_handler(event, context):
     
-    candidates = client.list_notebook_instances()
+    candidates = client.list_notebook_instances(StatusEquals='InService')
     
     for candidate in candidates['NotebookInstances']:
         candidateName = candidate['NotebookInstanceName']
